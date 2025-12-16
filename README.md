@@ -1,7 +1,7 @@
 <div align="center">
     <summary>
-      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability (Simulation + ROS2 Prep) </h1>
-      <h2>CMPT416 - Fall 2025</h2>
+      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability </h1>
+      <h2> Simulation + ROS2 Preperation </h2>
       <br>
     </summary>
 </div>
@@ -10,13 +10,23 @@
 
 This repository provides a simulation framework for safe reinforcement learning using Hamilton-Jacobi (HJ) reachability-based control barrier functions (HJ-CBFs)
 
-Current implementation focuses on:
-- Dubins3D navigation in simulation
-- SAC-LAG reinforcement learning
-- Online safety filtering using precomputed Backward Reachable Tubes (BRTs)
-- Structured to support future ROS2 Turtlebot integration
+This codebase is **adapted from and builds upon**
+https://github.com/sudo-michael/robust-hj-cbf-safe-rl
+with modifications to enable:
 
-The system supports a single Dubins3D regime and demonstrates stable integration of SAC-LAG with HJ-CBF safety filtering in simulation.
+- Runtime use of precomputed BRTs without HeteroCL
+- Stable integration with Gymnasium + JAX
+- Preperation for ROS2 Turtlebot deployment
+
+## Current Capabilities:
+
+- Dubins3D navigation in simulation
+
+- SAC-LAG reinforcement learning
+- Online HJ-CBF safety filtering
+- Precomputed Backward Reachable Tubes (BRTs)
+- Single-regime Dubins3D experiments
+- Structured to support future ROS2 Turtlebot integration but real-world Turtlebot deployment is not yet enabled
 
 # Safety Filtering Formulation
 
