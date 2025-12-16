@@ -1,4 +1,3 @@
-# CMPT416-fa25 
 <div align="center">
     <summary>
       <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability (Simulation + ROS2 Preperation)</h1>
