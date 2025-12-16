@@ -12,9 +12,9 @@
 
 
 ## Approach
+This project extends prior work on safe reinforcement learning using Hamilton–Jacobi (HJ) reachability-based Control Barrier Functions (HJ-CBFs). The project enabled robust safety filtering during reinforcement learning using precomputed Backward Reachable Tubes (BRTs), while preparing the codebase for future deployment on real robotic platforms using ROS2.
 
-This project extends the safe reinforcement learning using Hamilton-Jacobi (HJ) reachability based control barrier functions (HJ-CBFs).
-The project extends the original by leveraging precomputed Backward Reachable Tubes and preparing for ROS2 implementation of turtle. 
+The current implementation focuses on **simulation-based validation** using a Dubins vehicle model and SAC-Lagrangian (SAC-LAG) reinforcement learning.
 
 ### Description
 
@@ -23,41 +23,35 @@ The project extends the original by leveraging precomputed Backward Reachable Tu
 - Fixed grid indexing and spatial derivative matching
 - Hooked V_spa_deriv_at_state into solver
 - Got QP to return safe controls
-- Patched dynamics to support experiment, including:
+- Patched system dynamics to support simulation-based experiments, including:
   - Opt_ctrl_non_hcl
   - Dynamics_non_hcl
-  - Corrected wMax, grid, and BRT dimensions
+  - Corrected alignment of wMax, grid, and BRT dimensions
 - Enabled running training simulations with precomputed BRT values
 
-## Why a numerical ("Dummy") Dubins car was added
+## Why a Numerical ("Dummy") Dubins Car was Added
 
-The original implementation computes HJ reachability sets using OptimizedDP, which relies on HeteroCL for symbolic dynamics. However
-HeteroCL dynamics cant be executed inside Gym environments. As such to address this introduced a numerical Dubins Dynamics model ("dummy car") which exactly matches the dynamics used during BRT computation. This allows offline computation of BRTs using HeteroCL, eliminating runtime HeteroCL dependencies. 
+The original implementation computes Backward Reachable Tubes using OptimizedDP library, which relies on HeteroCL to symbollically define system dynamics. 
+
+While suitable for offline reachability computation, HeteroCL-based dynamics cannot be executed directly inside Gymnasium environments or JAX-based reinforcement learning pipelines.
+
+To address this limitation, a numerical Dubins dynamics model ("dummy car") was introduced. This model:
+
+- Exactly matches the dynamics assumptions used during BRT computation
+- Supports forward simulation and control evaluation
+- Exposes only the functions required for safety filtering and QP-based control projection
+
+This design allows BRTs to be computed **offline** using OptimizedDP and then reused **online** during learning without requiring HeteroCL at runtime.
 
 ## Dubins Vehicle Dynamics
 
-Consider a Dubins vehicle with state:
+The Dubins vehicle is a simplified model of a ground robot that:
 
-$$
-x = (p_x, p_y, \theta)
-$$
+- Moves at a constant forward speed
+- Can only change direction by applying an angular velocity
+- Cannot move sideways or stop
 
-and dynamics:
-
-
-$$
-\begin{aligned}
-\dot{p}_x &= v \cos \theta \\
-\dot{p}_y &= v \sin \theta \\
-\dot{\theta} &= u
-\end{aligned}
-$$
-
-where v is constant and 
-
-$$
-\ u \in [-\omega_{\max}, \omega_{\max}] .
-$$
+This model ensures consistency between the system dynamics used for reachability analysis and those used during reinforcement learning. The numerical Dubins model implemented here mirrors the original reachability dynamics and enables safe policy execution using precomputed BRT value functions.
 
 
 ## HJ Reachability and Safety Filtering
@@ -67,14 +61,16 @@ the signed distance to the unsafe set. Afterwards real-time safety can occur wit
 
 ### Experiments
 
-Ran a 10,000 step SAC-Lagrangian training end to end with the HJ-CBF shield on using precomputed BRT value grids
+- Successfully ran a **10,000-step SAC-Lagrangian training run** with the HJ-CBF safety filter enabled
+- Verified stable integration of:
+  - Precomputed BRTs
+  - Numerical Dubins dynamics
+  - QP-based safety filtering
 
 ## Implementation Notes
 
 This implementation adapts the original robust HJ-CBF framework (https://github.com/sudo-michael/robust-hj-cbf-safe-rl) by 
-introducing a numerical Dubins dynamics model allowing precomputed BRTs to be used inside Gymnasium and JAX-based reinforcement
+introducing a numerical Dubins dynamics model enabling use of precomputed BRTs to be used within Gymnasium and JAX-based reinforcement
 learning pipelines.
 
-The project is also designed to support future ROS2 turtle.
-
-
+The project is also designed to support future ROS2-based Turtlebot integration.
