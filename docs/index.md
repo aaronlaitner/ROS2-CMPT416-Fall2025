@@ -38,26 +38,26 @@ HeteroCL dynamics cant be executed inside Gym environments. As such to address t
 
 Consider a Dubins vehicle with state:
 
-```math
+$$
 x = (p_x, p_y, \theta)
-```
+$$
 
 and dynamics:
 
 
-```math
+$$
 \begin{aligned}
 \dot{p}_x &= v \cos \theta \\
 \dot{p}_y &= v \sin \theta \\
 \dot{\theta} &= u
 \end{aligned}
-```
+$$
 
 where v is constant and 
 
-```math
+$$
 \ u \in [-\omega_{\max}, \omega_{\max}] .
-```
+$$
 
 
 ## HJ Reachability and Safety Filtering
