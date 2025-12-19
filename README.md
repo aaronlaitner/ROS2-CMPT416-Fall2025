@@ -69,3 +69,17 @@ python train/train_sac_lag.py \
     --max_steps=10000 \
     --seed=0
 ```
+## Attribution and Prior Work
+
+This project is adapted from and builds upon:
+
+- Michael Lu et al., *Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability*  
+- https://github.com/sudo-michael/robust-hj-cbf-safe-rl
+
+Major modifications include:
+- Replacement of HeteroCL-only dynamics with executable numerical Dubins dynamics
+- Offline precomputation and runtime use of BRT value grids
+- Integration with Gymnasium-based RL training pipelines
+- Preparation for ROS2 Turtlebot deployment
+
+All original licensing terms are preserved.
