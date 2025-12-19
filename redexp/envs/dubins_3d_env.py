@@ -9,6 +9,10 @@ from redexp.brts.dubins_3d import (
     dubins_3d_omega_0_25,
     dubins_3d_omega_0_5,
     dubins_3d_omega_0_75,
+    # Numerical "dummy" dubins car instances matched to the BRT regimes
+    car_omega_0_25,
+    car_omega_0_5,
+    car_omega_0_75,
     grid,
 )
 
@@ -37,15 +41,17 @@ class Dubins3dEnv(gym.Env):
             "dubins_3d_omega_0_75",
         ], "unknown car"
 
+        # Numerical "dummy" dubins car instances matched to the BRT regimes
         if car == "dubins_3d_omega_0_25":
-            self.car = dubins_3d_omega_0_25
-            self.true_brt = np.load("./redexp/brts/dubins_3d_omega_0_25_brt.npy")
+            self.car = car_omega_0_25
+            self.true_brt = dubins_3d_omega_0_25
         elif car == "dubins_3d_omega_0_5":
-            self.car = dubins_3d_omega_0_5
-            self.true_brt = np.load("./redexp/brts/dubins_3d_omega_0_5_brt.npy")
+            self.car = car_omega_0_5
+            self.true_brt = dubins_3d_omega_0_5
         elif car == "dubins_3d_omega_0_75":
-            self.car = dubins_3d_omega_0_75
-            self.true_brt = np.load("./redexp/brts/dubins_3d_omega_0_75_brt.npy")
+            self.car = car_omega_0_75
+            self.true_brt = dubins_3d_omega_0_75
+
 
         assert brt in [
             "dubins_3d_omega_0_25",
@@ -123,7 +129,7 @@ class Dubins3dEnv(gym.Env):
         ):
             terminated = True
             info["reach_goal"] = True
-        info["reach_goal"] = False
+        info["reach_goal"] = False # ???
 
         self.traj_min_brt_value = min(
             self.traj_min_brt_value, self.grid.get_value(self.true_brt, self.state)

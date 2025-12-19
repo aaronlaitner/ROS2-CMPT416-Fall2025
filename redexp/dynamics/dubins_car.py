@@ -83,6 +83,14 @@ class DubinsCar:
         return (x_dot[0], y_dot[0], theta_dot[0])
 
     def opt_ctrl_non_hcl(self, t, state, spat_deriv):
+        """
+        Author: Aaron Laitner (Adapted from original)
+        Description:
+            - Computes an optimal control based on dv/dtheta
+            - Since control affects only dottheta the relevant derivative is spat_deriv[2].
+            - The selected control is at +/-wMwax based on sign and uMode convention
+            - Always returns (1,), not a scalar
+        """
         opt_w = None
         if spat_deriv[2] >= 0:
             if self.uMode == "max":
@@ -98,6 +106,11 @@ class DubinsCar:
         return np.array([opt_w])
 
     def opt_dist_non_hcl(self, t, state, spat_deriv):
+        """
+        Author: Aaron Laitner (Adapted from original)
+        Description: 
+            - Computes an optimal disturbance vector d based on dMode and the sign of spatial derivatives
+        """
         d_opt = np.zeros(3)
         if self.dMode == "max":
             for i in range(3):
@@ -114,6 +127,13 @@ class DubinsCar:
         return d_opt
 
     def dynamics_non_hcl(self, t, state, u_opt, disturbance=np.zeros(3)):
+        """
+        Author: Aaron Laitner
+
+        Description:
+            - Continuous time Dubins dynamics with optimal additive disturbance
+            - Returns derivative, caller handles dt integration
+        """
         if not isinstance(u_opt, np.ndarray):
             u_opt = np.array([u_opt])
         x_dot = self.speed * np.cos(state[2]) + disturbance[0]
