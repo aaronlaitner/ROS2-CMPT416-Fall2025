@@ -1,6 +1,6 @@
 <div align="center">
     <summary>
-      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability (Simulation + ROS2 Preperation)</h1>
+      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability (Simulation + ROS2 Preparation)</h1>
       <h2> Aaron Laitner - Dr. Mo Chen </h2>
       <br>
       <h3> Simon Fraser University, Burnaby, BC, Canada </h3>
