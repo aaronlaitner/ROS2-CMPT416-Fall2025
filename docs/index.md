@@ -12,7 +12,8 @@
 
 
 ## Approach
-This project extends prior work on safe reinforcement learning using Hamilton–Jacobi (HJ) reachability-based Control Barrier Functions (HJ-CBFs). The project enabled robust safety filtering during reinforcement learning using precomputed Backward Reachable Tubes (BRTs), while preparing the codebase for future deployment on real robotic platforms using ROS2.
+This project extends prior work from Michael Lu et al., *Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability*. 
+This project enabled robust safety filtering during reinforcement learning using precomputed Backward Reachable Tubes (BRTs), while preparing the codebase for future deployment on real robotic platforms using ROS2.
 
 The current implementation focuses on **simulation-based validation** using a Dubins vehicle model and SAC-Lagrangian (SAC-LAG) reinforcement learning.
 
