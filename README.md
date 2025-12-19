@@ -1,11 +1,36 @@
 <div align="center">
     <summary>
-      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability</h1>
+      <h1>Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability </h1>
+      <h2> Simulation + ROS2 Preperation </h2>
       <br>
     </summary>
 </div>
 
 # Overview
+
+This repository provides a simulation framework for safe reinforcement learning using Hamilton-Jacobi (HJ) reachability-based control barrier functions (HJ-CBFs)
+
+This codebase is **adapted from and builds upon**
+https://github.com/sudo-michael/robust-hj-cbf-safe-rl
+with modifications to enable:
+
+- Runtime use of precomputed BRTs without HeteroCL
+- Stable integration with Gymnasium + JAX
+- Preperation for ROS2 Turtlebot deployment
+
+## Current Capabilities:
+
+- Dubins3D navigation in simulation
+
+- SAC-LAG reinforcement learning
+- Online HJ-CBF safety filtering
+- Precomputed Backward Reachable Tubes (BRTs)
+- Single-regime Dubins3D experiments
+- Structured to support future ROS2 Turtlebot integration but real-world Turtlebot deployment is not yet enabled
+
+# Safety Filtering Formulation
+
+A learned policy is filtered online using the HJ value function:
 ```math
 \begin{align*}
     \phi(x, \pi_\theta(x)) :=
@@ -23,7 +48,7 @@ conda activate rhj
 pip install -e .
 ```
 ## Computing Backward Reachable Tubes (BRTs)
-Computing the BRTs requires [optimized_dp](https://github.com/SFU-MARS/optimized_dp) to be installed.
+BRT Computations requires the OptimizedDP library (https://github.com/SFU-MARS/optimized_dp)
 
 ```
 conda activate odp
@@ -33,46 +58,28 @@ python3 redexp/brts/dubins_3d.py
 python3 redexp/brts/turtlebot_brt.py
 ```
 
-# Simulation Training
+# Simulation Training (Dubins3D)
+To run SAC-LAG training with optional HJ-CBF safety filtering:
 ```
 python train/train_sac_lag.py \
     --config train/droq_config.py \
-    --env_name=Safe-Dubins3d-{No,Bad,Good}ModelMismatch-v1 \
-    # use robust HJ-CBF safety filter
-    #--cbf \
-    #--cbf_gamma=1.0 \
-    # use lrc safety filter 
-    # --lrc
-    --utd_ratio=20 \
-    --max_steps=250000
+    --env_name=Safe-Dubins3d-NoModelMismatch-v1 \
+    --cbf \
+    --cbf_gamma=1.0 \
+    --max_steps=10000 \
     --seed=0
 ```
-# Turtlebot Traning
-The method was tested on a [turtlebot2](https://www.turtlebot.com/turtlebot2/), using a local laptop for training. A VICON motion capture system was used to track the location of the robot.
-[ROS1 Noetic](https://wiki.ros.org/noetic) was used to communicate between all systems.
-## Setup On the Turtlebot
-```
-roscore
-roslaunch turtlebot_bringup minimal.launch
-```
-### Setup On the Training Laptop
-```
-roslaunch vicon_bridge vicon.launch
-python train_ros.py --config=train/dropq_config.py 
-```
-# Real World Training Videos
-<ul align="center" style="list-style: none;">
-<summary>Robust HJ-CBF Shielding Method</summary>
-<a href="https://youtu.be/5K37a0UyW74">
-  <img src="https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2F5K37a0UyW74" alt="Robust HJ-CBF Shielding Method" title="Robjust HJ-CBF Shielding Method"/>
-</a>
-<summary>Least-Restrictive Shielding Method</summary>
-<a href="https://youtu.be/nrTOmq6MYLM">
-  <img src="https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fyoutu.be%2FnrTOmq6MYLM" alt="Least-Restrictive Shielding Method" title="Least-Restrictive Shielding Method"/>
-</a>
-</ul>
+## Attribution and Prior Work
 
-# Acknowledgements
-The RL implementations were built upon [jaxrl](https://github.com/ikostrikov/jaxrl) / [jaxrl5](https://github.com/kylestach/fastrlap-release/tree/main/jaxrl5).
+This project is adapted from and builds upon:
 
-The [vicon_bridge](https://github.com/ethz-asl/vicon_bridge) ROS package was used to communicate with the VICON motion capture systems.
+- Michael Lu et al., *Safe Learning in the Real World via Adaptive Shielding with Hamilton-Jacobi Reachability*  
+- https://github.com/sudo-michael/robust-hj-cbf-safe-rl
+
+Major modifications include:
+- Replacement of HeteroCL-only dynamics with executable numerical Dubins dynamics
+- Offline precomputation and runtime use of BRT value grids
+- Integration with Gymnasium-based RL training pipelines
+- Preparation for ROS2 Turtlebot deployment
+
+All original licensing terms are preserved.
