@@ -8,7 +8,7 @@
     </summary>
 </div>
 
-### [Code](https://github.com/aaronlaitner/ROS2-CMPT416-Fall2025) · [Video Demo](https://youtu.be/VIDEO_ID)
+### [Code](https://github.com/aaronlaitner/ROS2-CMPT416-Fall2025) 
 
 
 ## Approach
