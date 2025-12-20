@@ -69,6 +69,15 @@ python train/train_sac_lag.py \
     --max_steps=10000 \
     --seed=0
 ```
+## Training Results (Dubins3D)
+
+### Return vs Training Steps
+![Return](docs/assets/return_vs_steps.png)
+### Safety Cost vs Training Steps
+![Costs](docs/assets/cost_vs_steps.png)
+### Minimum BRT Value Along Trajectory
+![Minimum BRT](docs/assets/min_brt_vs_steps.png)
+
 ## Attribution and Prior Work
 
 This project is adapted from and builds upon:
